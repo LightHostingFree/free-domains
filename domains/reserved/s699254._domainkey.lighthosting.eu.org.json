@@ -1,0 +1,11 @@
+{
+    "description": "Root Domain",
+
+    "domain": "lighthosting.eu.org",
+    "subdomain": "s699254._domainkey",
+    "record": {
+    "CNAME": "dkim.smtp2go.net"
+    },
+
+    "proxied": false
+}

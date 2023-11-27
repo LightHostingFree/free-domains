@@ -1,0 +1,13 @@
+{
+    "description": "Root Domain",
+
+    "domain": "lighthosting.eu.org",
+    
+    "record": {
+        "A": ["185.27.134.177"],
+        "MX": ["mx1.improvmx.com", "mx2.improvmx.com"],
+        "TXT": ["v=spf1 a mx ip4:207.182.136.179 ip4:209.190.85.158 ip4:209.190.9.26 ip4:209.190.9.26 ip4:69.197.12.1 include:spf.improvmx.com ?a"]
+    },
+
+    "proxied": false
+}

@@ -1,0 +1,12 @@
+# All Files
+* @andrewstech
+
+# Reserved Domains
+domains/reserved/* @lighthosting/owners
+
+# User Domains
+domains/* @lighthosting/maintainers
+
+# MD Files
+*.md @lighthosting/maintainers
+terms.md @lighthosting/owners

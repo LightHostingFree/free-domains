@@ -1,0 +1,11 @@
+{
+    "description": "Root Domain",
+
+    "domain": "lighthosting.eu.org",
+    "subdomain": "acme",
+    "record": {
+     "A": ["185.27.134.177"]
+    },
+
+    "proxied": false
+}
