@@ -23,5 +23,5 @@ jobs:
           # branch should not be protected
           branch: 'main'
           allowlist: lhfd-bot,bot*
-          remote-organization-name: 'Light-Hosting'
+          remote-organization-name: 'light-hosting'
           remote-repository-name: 'cla'
