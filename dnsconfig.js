@@ -56,13 +56,20 @@ for (var idx in domains) {
     proxyState = proxy.off;
   }
 
-  if (domainData.record.A) {
-    for (var a in domainData.record.A) {
+if (domainData.record.A) {
+  for (var a in domainData.record.A) {
+    const subdomain = domainData.subdomain || ''; // Ensure subdomain is defined
+    const ipAddress = IP(domainData.record.A[a]);
+
+    if (subdomain && ipAddress) {
       commit[domainData.domain].push(
-        A(domainData.subdomain, IP(domainData.record.A[a]), proxyState) // https://stackexchange.github.io/dnscontrol/js#A
-      )
+        A(subdomain, ipAddress, proxyState)
+      );
+    } else {
+      console.error("Invalid subdomain or IP address for A record:", domainData);
     }
   }
+}
 
   if (domainData.record.AAAA) {
     for (var aaaa in domainData.record.AAAA) {
@@ -105,4 +112,4 @@ for (var idx in domains) {
 
 for (var domainName in commit) {
   D(domainName, regNone, providerCf, commit[domainName]);
-  }
+}
