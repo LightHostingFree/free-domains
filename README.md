@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">Free subdomains for personal sites, open-source projects, and more.</p>
-<p align="center">Want to find services similar to this? Take a look on <a href="https://free-for.life/#/?id=domains">free-for.life</a>.</p>
+<p align="center">Want to find services similar to this? Take a look on <a href="https://github.com/open-domains/register">Open Domains</a>.</p>
 
 ## Notice
 NS records are no longer supported. Existing domains are unaffected.
@@ -69,19 +69,19 @@ This will hopefully be fixed soon.
 1. Install the CLI using this command:
 
 ```
-npm install @open-domains/cli -g
+npm install @light-hosting/cli -g
 ```
 
 2. Login to the CLI:
 
 ```
-open-domains login
+light-hosting login
 ```
 
 3. Register a domain and follow the steps:
 
 ```
-open-domains register
+light-hosting register
 ```
 
 ### Manual
@@ -93,7 +93,7 @@ open-domains register
 {
     "description": "Project Description",
 
-    "domain": "is-not-a.dev",
+    "domain": "lighthosting.eu.org",
     "subdomain": "example",
 
     "owner": {

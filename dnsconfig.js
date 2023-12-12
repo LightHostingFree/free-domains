@@ -1,108 +1,59 @@
-var regNone = NewRegistrar("none");
-var providerCf = DnsProvider(NewDnsProvider("cloudflare"));
+var subDomains = [];
 
-var proxy = { // https://stackexchange.github.io/dnscontrol/providers/cloudflare
-  on: { "cloudflare_proxy": "on" },
-  off: { "cloudflare_proxy": "off" }
-}
+var validate = {
+  domain: function (domain) {
+    // Replace this comment with your actual domain validation logic
+    // For example, you might check if the domain follows a specific pattern or is in a predefined list
+    return typeof domain === 'string' && /^[\w.-]+\.eu\.org$/.test(domain);
+  },
 
-/**
- * Note: glob() is only an internal undocumented helper function (maybe risky).
- *
- * @param {String} filesPath
- * @returns {{
- *  name: string,
- *  data: {
- *    description?: string,
- *    domain: string,
- *    subdomain: string,
- *    owner?: {repo?: string, email?: string},
- *    record: {TXT?: string[], A?: string[], AAAA?: string[], CNAME?: string, NS?: string[]},
- *    proxied?: boolean
- *  }}[]}
-*/
-
-function getDomainsList(filesPath) {
-  var result = [];
-  var files = glob.apply(null, [filesPath, true, '.json']);
-
-  for (var i = 0; i < files.length; i++) {
-    var basename = files[i].split('/').reverse()[0];
-    var name = basename.split('.')[0];
-
-    result.push({name: name, data: require(files[i])});
-  }
-
-  return result;
-}
-
-var domains = getDomainsList('./domains');
-
-/**
- * @type {{}}
-*/
-
-var commit = {};
-
-for (var idx in domains) {
-  var domainData = domains[idx].data;
-  var proxyState = proxy.on; // enabled by default
-
-  if (!commit[domainData.domain]) {
-    commit[domainData.domain] = [];
-  }
-
-  if (domainData.proxied === false) {
-    proxyState = proxy.off;
-  }
-
-  if (domainData.record.A) {
-    for (var a in domainData.record.A) {
-      commit[domainData.domain].push(
-        A(domainData.subdomain, IP(domainData.record.A[a]), proxyState) // https://stackexchange.github.io/dnscontrol/js#A
-      )
-    }
-  }
-
-  if (domainData.record.AAAA) {
-    for (var aaaa in domainData.record.AAAA) {
-      commit[domainData.domain].push(
-        AAAA(domainData.subdomain, domainData.record.AAAA[aaaa], proxyState) // https://stackexchange.github.io/dnscontrol/js#AAAA
-      )
-    }
-  }
-
-  if (domainData.record.CNAME) {
-    commit[domainData.domain].push(
-      CNAME(domainData.subdomain, domainData.record.CNAME + ".", proxyState) // https://stackexchange.github.io/dnscontrol/js#CNAME
-    )
-  }
+  description: function (description) {
+    return typeof description === 'string' && description.length > 4;
+  },
   
-  if (domainData.record.MX) {
-    for (var mx in domainData.record.MX) {
-      commit[domainData.domain].push(
-        MX(domainData.subdomain, 10, domainData.record.MX[mx] + ".") // https://stackexchange.github.io/dnscontrol/js#CNAME
-      )
-    }  
-  }
+  // ... (other validation functions)
 
-  if (domainData.record.NS) {
-    for (var ns in domainData.record.NS) {
-      commit[domainData.domain].push(
-        NS(domainData.subdomain, domainData.record.NS[ns] + ".") // https://stackexchange.github.io/dnscontrol/js#NS
-      )
+  subDomainData: function (data) {
+    if (typeof data !== 'object') {
+      throw new Error('Invalid subdomain data (must be an object)');
     }
-  }
 
-  if (domainData.record.TXT) {
-    for (var txt in domainData.record.TXT) {
-      commit[domainData.domain].push(
-        TXT(domainData.subdomain, domainData.record.TXT[txt]) // https://stackexchange.github.io/dnscontrol/js#TXT
-      )
-    }
+    this.domain(data.domain);
+    this.description(data.description);
+    // ... (other validations)
+
+    subDomains.push(data);
+  }
+};
+
+function addSubDomain(data) {
+  try {
+    validate.subDomainData(data);
+    console.log('Subdomain registration successful!');
+  } catch (error) {
+    console.error('Error registering subdomain:', error.message);
   }
 }
 
-for (var domainName in commit) {
-  D(domainName, regNone, providerCf, commit[domainName]);
-}
+// Example input data
+var exampleInput = {
+  "description": "Example Project",
+  "domain": "lighthosting.eu.org",
+  "subdomain": "blog",
+  "owner": {
+    "repo": "https://github.com/example/repo",
+    "email": "contact@example.com"
+  },
+  "record": {
+    "A": ["192.168.1.1", "192.168.1.2"],
+    "AAAA": ["2001:db8::1", "2001:db8::2"],
+    "CNAME": "www.example.com",
+    "MX": ["mx1.example.com", "mx2.example.com"],
+    "NS": ["ns1.example.com", "ns2.example.com"],
+    "TXT": ["verification=abcdef123456"]
+  },
+  "proxied": true
+};
+
+// Try to add the new subdomain directly
+addSubDomain(exampleInput);
