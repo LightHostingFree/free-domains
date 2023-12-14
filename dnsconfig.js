@@ -1,59 +1,77 @@
-var subDomains = [];
+var regNone = NewRegistrar("none");
+var providerCf = DnsProvider(NewDnsProvider("cloudflare"));
 
-var validate = {
-  domain: function (domain) {
-    // Replace this comment with your actual domain validation logic
-    // For example, you might check if the domain follows a specific pattern or is in a predefined list
-    return typeof domain === 'string' && /^[\w.-]+\.eu\.org$/.test(domain);
-  },
+var proxy = {
+    off: { cloudflare_proxy: "off" },
+    on: { cloudflare_proxy: "on" }
+};
 
-  description: function (description) {
-    return typeof description === 'string' && description.length > 4;
-  },
-  
-  // ... (other validation functions)
+function getDomainsList(filesPath) {
+    var result = [];
+    var files = glob.apply(null, [filesPath, true, ".json"]);
 
-  subDomainData: function (data) {
-    if (typeof data !== 'object') {
-      throw new Error('Invalid subdomain data (must be an object)');
+    for (var i = 0; i < files.length; i++) {
+        var basename = files[i].split("/").reverse()[0];
+        var name = basename.split(".")[0];
+
+        result.push({ name: name, data: require(files[i]) });
     }
 
-    this.domain(data.domain);
-    this.description(data.description);
-    // ... (other validations)
-
-    subDomains.push(data);
-  }
-};
-
-function addSubDomain(data) {
-  try {
-    validate.subDomainData(data);
-    console.log('Subdomain registration successful!');
-  } catch (error) {
-    console.error('Error registering subdomain:', error.message);
-  }
+    return result;
 }
 
-// Example input data
-var exampleInput = {
-  "description": "Example Project",
-  "domain": "lighthosting.eu.org",
-  "subdomain": "blog",
-  "owner": {
-    "repo": "https://github.com/example/repo",
-    "email": "contact@example.com"
-  },
-  "record": {
-    "A": ["192.168.1.1", "192.168.1.2"],
-    "AAAA": ["2001:db8::1", "2001:db8::2"],
-    "CNAME": "www.example.com",
-    "MX": ["mx1.example.com", "mx2.example.com"],
-    "NS": ["ns1.example.com", "ns2.example.com"],
-    "TXT": ["verification=abcdef123456"]
-  },
-  "proxied": true
-};
+var domains = getDomainsList("../domains");
 
-// Try to add the new subdomain directly
-addSubDomain(exampleInput);
+var commit = {};
+
+for (var idx in domains) {
+    var domainData = domains[idx].data;
+    var proxyState = proxy.off;
+
+    if (!commit[domainData.domain]) commit[domainData.domain] = [];
+    if (domainData.proxied === true) proxyState = proxy.on;
+
+    if (domainData.records.A) {
+        for (var a in domainData.records.A) {
+            commit[domainData.domain].push(A(domainData.subdomain, IP(domainData.records.A[a]), proxyState));
+        }
+    }
+
+    if (domainData.records.AAAA) {
+        for (var aaaa in domainData.records.AAAA) {
+            commit[domainData.domain].push(AAAA(domainData.subdomain, domainData.records.AAAA[aaaa], proxyState));
+        }
+    }
+
+    if (domainData.records.CNAME) {
+        commit[domainData.domain].push(CNAME(domainData.subdomain, domainData.records.CNAME + ".", proxyState));
+    }
+
+    if (domainData.records.MX) {
+        for (var mx in domainData.records.MX) {
+            commit[domainData.domain].push(MX(domainData.subdomain, domainData.records.MX[mx].priority, domainData.records.MX[mx].value + "."));
+        }
+    }
+
+    // if (domainData.records.NS) {
+        // for (var ns in domainData.records.NS) {
+            // commit[domainData.domain].push(NS(domainData.subdomain, domainData.records.NS[ns] + "."));
+        // }
+    // }
+
+    if (domainData.records.TXT) {
+        for (var txt in domainData.records.TXT) {
+            if (domainData.records.TXT[txt].name === "@") {
+                commit[domainData.domain].push(TXT(domainData.subdomain, domainData.records.TXT[txt].value));
+            } else if (domainData.subdomain === "@") {
+                commit[domainData.domain].push(TXT(domainData.records.TXT[txt].name, domainData.records.TXT[txt].value));
+            } else {
+                commit[domainData.domain].push(TXT(domainData.records.TXT[txt].name + "." + domainData.subdomain, domainData.records.TXT[txt].value));
+            }
+        }
+    }
+}
+
+for (var domainName in commit) {
+    D(domainName, regNone, providerCf, commit[domainName]);
+}
