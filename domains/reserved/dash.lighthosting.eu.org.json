@@ -1,9 +1,12 @@
 {
-    "description": "Root Domain",
-
     "domain": "lighthosting.eu.org",
-     "subdomain": "dash",
-     "record": {
+    "subdomain": "dash",
+
+    "owner": {
+        "email": ""
+    },
+
+    "records": {
         "A": ["185.27.134.177"]
     },
 

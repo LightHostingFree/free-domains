@@ -91,23 +91,29 @@ light-hosting register
 
 ```json
 {
-    "description": "Project Description",
-
-    "domain": "lighthosting.eu.org",
+    "domain": "is-a-fullstack.dev",
     "subdomain": "example",
 
     "owner": {
-        "repo": "https://github.com/username/repo",
         "email": "hello@example.com"
     },
 
-    "record": {
+    "records": {
         "A": ["1.1.1.1", "1.0.0.1"],
-        "AAAA": ["::1", "::2"],
+        "AAAA": ["2606:4700:4700::1111", "2606:4700:4700::1001"],
         "CNAME": "example.com",
-        "MX": ["mx1.example.com", "mx2.example.com"],
-        "NS": ["ns1.example.com", "ns2.example.com"],
-        "TXT": ["example_verification=1234567890"]
+        "MX": [
+            {
+                "priority": 10,
+                "value": "mx.example.com"
+            }
+        ],
+        "TXT": [
+            {
+                "name": "@",
+                "value": "example_verification=1234567890"
+            }
+        ]
     },
 
     "proxied": false
