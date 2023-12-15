@@ -1,0 +1,11 @@
+{
+    "domain": "lighthosting.eu.org",
+    "owner": {
+        "email": ""
+    },
+    "records": {
+        "A": ["185.27.134.177"],
+        "MX": ["mx1.improvmx.com", "mx2.improvmx.com"],
+        "proxied": false
+    }
+}
