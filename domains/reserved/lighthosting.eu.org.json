@@ -8,7 +8,12 @@
     "records": {
         "A": ["185.27.134.177"],
         "MX": ["mx1.improvmx.com", "mx2.improvmx.com"],
-        "TXT": ["v=spf1 a mx ip4:207.182.136.179 -all"]
+        "TXT": [
+            {
+                "name": "@",
+                "value": "v=spf1 a mx ip4:207.182.136.179 -all"
+            }
+        ]
     },
 
     "proxied": false

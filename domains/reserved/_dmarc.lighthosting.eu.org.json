@@ -7,7 +7,12 @@
     },
 
     "records": {
-        "TXT": ["v=DMARC1; p=none; rua=mailto:28e>"]
+        "TXT": [
+            {
+                "name": "@",
+                "value": "v=DMARC1; p=none; rua=mailto:28e>"
+            }
+        ]
     },
 
     "proxied": false
