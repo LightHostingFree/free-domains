@@ -9,7 +9,7 @@
         "MX": [
             {
                 "priority": 10,
-                "value": ["mx1.improvmx.com", "mx2.improvmx.com"]
+                "value": "mx1.improvmx.com"
             }
         ],
         "TXT": [
