@@ -44,7 +44,9 @@ for (var idx in domains) {
     }
 
     if (domainData.records.CNAME) {
-        commit[domainData.domain].push(CNAME(domainData.subdomain, domainData.records.CNAME + ".", proxyState));
+    for (var cname in domainData.records.CNAME) {
+        commit[domainData.domain].push(CNAME(domainData.subdomain, domainData.records.CNAME[cname] + ".", proxyState));
+        }
     }
 
     if (domainData.records.MX) {
