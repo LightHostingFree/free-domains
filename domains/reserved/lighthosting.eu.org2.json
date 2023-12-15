@@ -1,0 +1,11 @@
+{
+    "domain": "lighthosting.eu.org",
+    "records": {
+        "TXT": [
+            {
+                "name": "@",
+                "value": "v=spf1 a mx ip4:207.182.136.179 -all"
+            }
+        ]
+    }
+}
