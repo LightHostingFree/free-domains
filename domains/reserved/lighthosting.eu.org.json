@@ -6,7 +6,12 @@
     },
     "records": {
         "A": ["185.27.134.177"],
-        "MX": ["mx1.improvmx.com", "mx2.improvmx.com"],
+        "MX": [
+            {
+                "priority": 10,
+                "value": ["mx1.improvmx.com", "mx2.improvmx.com"]
+            }
+        ],
         "TXT": [
             {
                 "name": "@",
