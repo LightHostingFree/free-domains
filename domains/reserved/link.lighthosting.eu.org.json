@@ -1,10 +1,13 @@
 {
-    "description": "Root Domain",
-
     "domain": "lighthosting.eu.org",
     "subdomain": "link",
-    "record": {
-    "CNAME": "track.smtp2go.net"
+
+    "owner": {
+        "email": ""
+    },
+
+    "records": {
+        "CNAME": "track.smtp2go.net"
     },
 
     "proxied": false

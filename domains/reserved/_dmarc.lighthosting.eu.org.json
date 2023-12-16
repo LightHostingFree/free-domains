@@ -1,10 +1,18 @@
 {
-    "description": "Root Domain",
-
     "domain": "lighthosting.eu.org",
-     "subdomain": "_dmarc",
-    "record": {
-        "TXT": ["v=DMARC1; p=none; rua=mailto:28ef54afe4964560a6f9bde69c5bb40b@dmarc-reports.cloudflare.net"]
+    "subdomain": "_dmarc",
+
+    "owner": {
+        "email": "admin@lighthosting.eu.org"
+    },
+
+    "records": {
+        "TXT": [
+            {
+                "name": "@",
+                "value": "v=DMARC1; p=none; rua=mailto:28e>"
+            }
+        ]
     },
 
     "proxied": false

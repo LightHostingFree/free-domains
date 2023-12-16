@@ -1,10 +1,13 @@
 {
-    "description": "Root Domain",
-
     "domain": "lighthosting.eu.org",
     "subdomain": "em699254",
-    "record": {
-    "CNAME": "return.smtp2go.ne"
+
+    "owner": {
+        "email": ""
+    },
+
+    "records": {
+        "CNAME": "return.smtp2go.ne"
     },
 
     "proxied": false

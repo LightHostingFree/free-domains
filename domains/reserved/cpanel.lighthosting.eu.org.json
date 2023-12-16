@@ -1,10 +1,13 @@
 {
-    "description": "Root Domain",
-
     "domain": "lighthosting.eu.org",
-     "subdomain": "cpanel",
-    "record": {
-    "NS": ["ns1.byet.org", "ns2.byet.org"]
+    "subdomain": "cpanel",
+
+    "owner": {
+        "email": ""
+    },
+
+    "records": {
+        "NS": ["ns1.byet.org", "ns2.byet.org"]
     },
 
     "proxied": false
